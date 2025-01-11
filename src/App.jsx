@@ -5,6 +5,7 @@ import { Navigate, Route, Routes } from "react-router";
 import Home from "./components/Home";
 import Products from "./components/Products";
 import Product from "./components/product";
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
 
       <Routes>
         <Route index element={<Home />} />
+        <Route path="/login" element={<Login />}/>
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="*" element={<Navigate to="/home" replace={true} />} />

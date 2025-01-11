@@ -4,10 +4,31 @@
 .tra {
   backdrop-filter: blur(5px);
 }
+.h-90vh{
+  height: 90vh;
+}
 .card img {
   height: 280px;
 }
 .card {
   background: transparent;
   backdrop-filter: blur(10px);
+}
+
+.auth-form {
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-btn {
+  background-color: #1976d2;
+  color: white;
+  margin-top: 20px;
+}
+
+.auth-btn:hover {
+  background-color: #1565c0;
 }
