@@ -1,24 +1,34 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Top from "./components/Top";
-import { Navigate, Route, Routes } from "react-router";
-import Home from "./components/Home";
-import Products from "./components/Products";
-import Product from "./components/product";
-import Login from "./components/Login";
+import { useContext, useEffect, useState } from "react";
+import { GlobalContext } from "./context/Context";
+import Links from "./components/Links";
+import axios from "axios";
 
 function App() {
-  return (
+  const{state , dispatch, logout} = useContext(GlobalContext)
+  const [loading,setLoading] = useState(true)
+  useEffect(()=>{
+
+    let userToken = localStorage.getItem("userToken")
+    axios.get('https://dummyjson.com/auth/me' , { headers: { Authorization: `Bearer ${userToken}` }})
+    .then((res) => {
+      console.log(res.data)
+      dispatch({type: "USER_LOGIN", payload: res.data})
+      setLoading(false)
+    })
+    .catch((err) => {
+      logout()
+      setLoading(false)
+      console.log(err)
+    })
+  }
+  ,[])
+    return (
     <div className="app">
       <Top />
-
-      <Routes>
-        <Route index element={<Home />} />
-        <Route path="/login" element={<Login />}/>
-        <Route path="/products" element={<Products />} />
-        <Route path="/product/:id" element={<Product />} />
-        <Route path="*" element={<Navigate to="/home" replace={true} />} />
-      </Routes>
+     <Links />
     </div>
   );
 }

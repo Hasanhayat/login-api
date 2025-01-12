@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router";
+import Loader from "./Loader";
 
 const Products = () => {
   const [posts, setPosts] = useState(null);
@@ -19,12 +20,7 @@ const Products = () => {
   }, []);
   if (!posts)
     return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: "80vh" }}
-      >
-        <CircularProgress size={70} />
-      </div>
+          <Loader />
     );
   return (
     <div className="tra container rounded-5 mt-2 shadow-lg p-3 d-flex flex-wrap justify-content-center">

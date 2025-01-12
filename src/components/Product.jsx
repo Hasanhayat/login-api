@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import "./components.css";
 import { Rating, CircularProgress, Button } from "@mui/material";
 import { Card, ListGroup } from "react-bootstrap";
+import Loader from "./Loader";
 
 const Product = () => {
   const { id } = useParams();
@@ -25,12 +26,7 @@ const Product = () => {
 
   if (loading)
     return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: "80vh" }}
-      >
-        <CircularProgress size={70} />
-      </div>
+      <Loader />
     );
 
   return (

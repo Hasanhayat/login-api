@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { TextField, Button, Typography, Alert, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router";
 import "./components.css";
 import axios from "axios";
+import { GlobalContext } from "../context/Context.jsx";
+import Loader from "./Loader.jsx";
 
 const Login = () => {
-    
-    let {state , dispatch} = useContext(GlobalContext)
+  let { state, dispatch } = useContext(GlobalContext);
   const [error, setError] = useState("");
+  const [loading , setLoading] = useState(false)
   const [alertOpen, setAlertOpen] = useState(false);
-  const alertClose = () =>{
-    setAlertOpen(false)
-  }
+  const alertClose = () => {
+    setAlertOpen(false);
+  };
 
   const navigate = useNavigate();
 
@@ -31,6 +33,7 @@ const Login = () => {
         .required("Password is required"),
     }),
     onSubmit: (values) => {
+        setLoading(true)
       axios
         .post("https://dummyjson.com/auth/login", {
           username: values.userName,
@@ -38,19 +41,28 @@ const Login = () => {
         })
         .then((response) => {
           console.log("Res : ", response.data);
-          // dispatch({type: "USER_LOGIN", payload: response.data})
-          navigate("/");
+          dispatch({ type: "USER_LOGIN", payload: response.data });
+          console.log(state);
+          setLoading(false)
+          localStorage.setItem("userToken" , response?.data?.accessToken)
+          navigate("/login");
         })
         .catch((error) => {
           console.log("Error", error);
           setError(error.response?.data?.message);
           setAlertOpen(true);
+          setLoading(false)
+
         });
     },
   });
   useEffect(() => {
     document.title = "Login - E-commerce";
   }, []);
+  if (loading)
+    return (
+      <Loader />
+    );
 
   return (
     <div className="d-flex justify-content-center align-items-center h-90vh">
@@ -77,14 +89,7 @@ const Login = () => {
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
         />
-         <Snackbar open={alertOpen} autoHideDuration={3000} onClose={alertClose} anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'top'
-                    }}>
-                        <Alert onClose={alertClose} severity="error" sx={{ width: '100%' }}>
-                            {error}
-                        </Alert>
-                    </Snackbar>
+
         <Button
           type="submit"
           variant="contained"
@@ -94,6 +99,19 @@ const Login = () => {
           Login
         </Button>
       </form>
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={3000}
+        onClose={alertClose}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        <Alert onClose={alertClose} severity="error" sx={{ width: "100%" }}>
+          {error}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
