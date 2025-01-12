@@ -2,7 +2,13 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import "./components.css";
-import { Rating, CircularProgress, Button, Snackbar } from "@mui/material";
+import {
+  Rating,
+  CircularProgress,
+  Button,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { Card, ListGroup } from "react-bootstrap";
 import Loader from "./Loader";
 import { GlobalContext } from "../context/Context";
@@ -77,16 +83,23 @@ const Product = () => {
     <div className="container mt-4">
       <Snackbar
         open={alert}
-        autoHideDuration={3000}
+        autoHideDuration={2000}
         onClose={alertClose}
         anchorOrigin={{
           vertical: "top",
           horizontal: "center",
         }}
         message="Added successfully"
-
-      />
-
+      >
+        <Alert
+          onClose={alertClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Added successfully{" "}
+        </Alert>
+      </Snackbar>
       <Card className="shadow-lg p-3 mb-5 rounded-5">
         <div className="row g-4">
           {/* Product Image */}
