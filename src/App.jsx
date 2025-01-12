@@ -5,10 +5,10 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "./context/Context";
 import Links from "./components/Links";
 import axios from "axios";
+import Loader from "./components/Loader";
 
 function App() {
   const{state , dispatch, logout} = useContext(GlobalContext)
-  const [loading,setLoading] = useState(true)
   useEffect(()=>{
 
     let userToken = localStorage.getItem("userToken")
@@ -16,11 +16,9 @@ function App() {
     .then((res) => {
       console.log(res.data)
       dispatch({type: "USER_LOGIN", payload: res.data})
-      setLoading(false)
     })
     .catch((err) => {
       logout()
-      setLoading(false)
       console.log(err)
     })
   }

@@ -10,6 +10,31 @@ const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const addToCart = () => {
+    setLoading(true);
+    axios
+      .put("https://dummyjson.com/carts/1", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          merge: true, // this will include existing products in the cart
+          products: [
+            {
+              id: id,
+              quantity: 1,
+            },
+          ],
+        }),
+      })
+      .then((res) => {
+        setLoading(false);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
     axios
@@ -24,10 +49,7 @@ const Product = () => {
       });
   }, [id]);
 
-  if (loading)
-    return (
-      <Loader />
-    );
+  if (loading) return <Loader />;
 
   return (
     <div className="container mt-4">
@@ -88,7 +110,12 @@ const Product = () => {
                 </ListGroup.Item>
               </ListGroup>
 
-              <Button variant="contained" color="primary" size="large">
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={addToCart}
+              >
                 Add to Cart
               </Button>
             </Card.Body>

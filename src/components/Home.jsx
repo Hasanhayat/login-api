@@ -9,6 +9,7 @@ const Home = () => {
   const [posts, setPosts] = useState(null);
 
   useEffect(() => {
+    document.title = "E-commerce - store";
     axios
       .get(`https://dummyjson.com/products`)
       .then((res) => {

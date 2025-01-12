@@ -5,11 +5,13 @@ import Login from './Login'
 import Products from './Products'
 import Product from './product'
 import { GlobalContext } from '../context/Context'
+import Loader from './Loader'
 
 const Links = () => {
     const{state , dispatch} = useContext(GlobalContext)
   
   return (
+    
     (state.isLogin == true)?
       <Routes>
       <Route index element={<Home />} />
@@ -18,13 +20,16 @@ const Links = () => {
       <Route path="*" element={<Navigate to="/" replace={true} />} />
       </Routes>
       :
+      (state.isLogin == false)?
       <Routes>
         <Route path="/login" element={<Login />}/>
         <Route path="*" element={<Navigate to="/login" replace={true} />} />
       </Routes>
+      :
+      <Loader />
     
-     
     
+      
   )
 }
 
