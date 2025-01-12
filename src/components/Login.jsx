@@ -42,7 +42,6 @@ const Login = () => {
         .then((response) => {
           console.log("Res : ", response.data);
           dispatch({ type: "USER_LOGIN", payload: response.data });
-          console.log(state);
           setLoading(false)
           localStorage.setItem("userToken" , response?.data?.accessToken)
           navigate("/login");

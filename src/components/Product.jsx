@@ -1,15 +1,21 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import "./components.css";
-import { Rating, CircularProgress, Button } from "@mui/material";
+import { Rating, CircularProgress, Button, Snackbar } from "@mui/material";
 import { Card, ListGroup } from "react-bootstrap";
 import Loader from "./Loader";
+import { GlobalContext } from "../context/Context";
 
 const Product = () => {
+  let { state, dispatch } = useContext(GlobalContext);
   const { id } = useParams();
+  const [alert, setAlert] = useState(false);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const alertClose = () => {
+    setAlert(false);
+  };
   const addToCart = () => {
     setLoading(true);
     axios
@@ -27,6 +33,7 @@ const Product = () => {
         }),
       })
       .then((res) => {
+        setAlert(true);
         setLoading(false);
         console.log(res);
       })
@@ -47,12 +54,39 @@ const Product = () => {
         console.error(err);
         setLoading(false);
       });
+
+    axios
+      .post("https://dummyjson.com/carts/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: state.user.id,
+        }),
+      })
+      .then((res) => {
+        setProduct(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, [id]);
 
   if (loading) return <Loader />;
 
   return (
     <div className="container mt-4">
+      <Snackbar
+        open={alert}
+        autoHideDuration={3000}
+        onClose={alertClose}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        message="Added successfully"
+
+      />
+
       <Card className="shadow-lg p-3 mb-5 rounded-5">
         <div className="row g-4">
           {/* Product Image */}
