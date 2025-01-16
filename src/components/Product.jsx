@@ -19,33 +19,40 @@ const Product = () => {
   const [alert, setAlert] = useState(false);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cartLoading, setCartLoading] = useState(false);
+
   const alertClose = () => {
     setAlert(false);
   };
   const addToCart = () => {
-    setLoading(true);
+    setCartLoading(true);
+    let addData = {
+      userId: state.user.id,
+      products: [
+        {
+          id: id,
+          quantity: 4,
+        },
+      ],
+    };
+
+    let addConfig = {
+      url: "https://dummyjson.com/carts/add",
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: JSON.stringify(addData),
+    };
     axios
-      .put("https://dummyjson.com/carts/1", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          merge: true, // this will include existing products in the cart
-          products: [
-            {
-              id: id,
-              quantity: 1,
-            },
-          ],
-        }),
-      })
+      .request(addConfig)
       .then((res) => {
         setAlert(true);
-        setLoading(false);
-        console.log(res);
+        setCartLoading(false);
+        console.log(res.data);
       })
       .catch((err) => {
         console.error(err);
         setLoading(false);
+        setCartLoading(false);
       });
   };
 
@@ -60,24 +67,9 @@ const Product = () => {
         console.error(err);
         setLoading(false);
       });
-
-    axios
-      .post("https://dummyjson.com/carts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: state.user.id,
-        }),
-      })
-      .then((res) => {
-        setProduct(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
   }, [id]);
 
-  // if (loading) return <Loader />;
+  if (loading) return <Loader />;
 
   return (
     <div className="container mt-4">
@@ -163,9 +155,16 @@ const Product = () => {
                 size="large"
                 onClick={addToCart}
               >
-                {(loading)? <Loader /> 
-                :
-                 "Add to Cart"}
+                {cartLoading ? (
+                  <div
+                    className="d-flex justify-content-center align-items-center"
+                    style={{ height: "" }}
+                  >
+                    <CircularProgress size={25} color="white" />
+                  </div>
+                ) : (
+                  "Add to Cart"
+                )}
               </Button>
             </Card.Body>
           </div>

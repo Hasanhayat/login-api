@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
 import Home from './Home'
 import Login from './Login'
+import Cart from './cart'
 import Products from './Products'
 import Product from './Product'
 import { GlobalContext } from '../context/Context'
@@ -16,6 +17,7 @@ const Links = () => {
       <Routes>
       <Route index element={<Home />} />
       <Route path="/products" element={<Products />} />
+      <Route path="/cart" element={<Cart />} />
       <Route path="/product/:id" element={<Product />} />
       <Route path="*" element={<Navigate to="/" replace={true} />} />
       </Routes>
