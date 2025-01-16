@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from 'react-router'
 import Home from './Home'
 import Login from './Login'
 import Products from './Products'
-import Product from './product'
+import Product from './Product'
 import { GlobalContext } from '../context/Context'
 import Loader from './Loader'
 

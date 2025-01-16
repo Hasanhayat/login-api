@@ -77,7 +77,7 @@ const Product = () => {
       });
   }, [id]);
 
-  if (loading) return <Loader />;
+  // if (loading) return <Loader />;
 
   return (
     <div className="container mt-4">
@@ -163,7 +163,9 @@ const Product = () => {
                 size="large"
                 onClick={addToCart}
               >
-                Add to Cart
+                {(loading)? <Loader /> 
+                :
+                 "Add to Cart"}
               </Button>
             </Card.Body>
           </div>
